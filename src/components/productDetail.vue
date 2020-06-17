@@ -1,12 +1,14 @@
 <template>
   <body>
     <div v-for="prod in product" :key="prod.product_name">
-      <div v-if="id == prod._id">
+      <div v-if="id == prod._id.$oid">
         {{ prod.product_name }}
         {{ prod.supplier }}
-        {{ prod.unit_cost}}
+        {{ prod.unit_cost }}
       </div>
     </div>
+      <!-- My name is <input v-model="idObj"> -->
+
   </body>
 </template>
 <script>
@@ -27,8 +29,9 @@ export default {
     getProduct() {
       axios.get("/static/data.json").then(res => {
         this.product = res.data;
+        localStorage.setItem('id', this.id)
       });
-    },
-  },
+    }
+  }
 };
 </script>

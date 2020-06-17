@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="container">
     <h3>Products</h3>
@@ -8,6 +6,7 @@
 
     <button @click="sort">Order by Price (DESC)</button>
     <button @click="reverse">Order By Price (ASC)</button>
+    <button @click="goBack">Last item view</button>
     <table class="table">
       <thead>
         <tr>
@@ -20,9 +19,9 @@
       </thead>
       <tbody>
         <tr  v-for="product in filteredProducts" :key="product.product_name ">
-          <th scope="row">{{ product._id }}</th>
+          <th scope="row">{{ product._id.$oid }}</th>
           <!-- <td > {{ product.product_name }}</td> -->
-          <router-link tag="td" :to="'/product/' + product._id"><a>{{ product.product_name }}</a></router-link>
+          <router-link tag="td" :to="'/product/' + product._id.$oid"><a>{{ product.product_name }}</a></router-link>
           <td>{{ product.supplier }}</td>
           <td>{{ product.quantity }}</td>
           <td>{{ product.unit_cost }}</td>
@@ -43,6 +42,7 @@ export default {
       componentLoaded: false,
       search: "",
       products: [],
+      lastView: ''
     };
   },
   created: function() {
@@ -72,7 +72,14 @@ export default {
       var bN = parseInt(b.unit_cost.replace(reN, ""), 10);
       return aN === bN ? 0 : aN > bN ? 1 : -1;
     },
+    goBack: function () {
+      this.$router.push('/product/'+this.lastView)
+    }
   },
+  mounted() {
+    this.lastView = localStorage.getItem('id')
+    // console.log(this.lastView)
+    },
   computed: {
     filteredProducts() {
       return this.products.filter((product) => {
