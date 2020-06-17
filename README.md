@@ -19,6 +19,6 @@ Pour utiliser cette application :
 
 * 3 - Lancer le serveur local
     ```
-    npm run serv    
+    npm run dev   
     ``` 
 * 4 - Lancer le navigateur Web de votre choix et aller sur http://localhost:8080
