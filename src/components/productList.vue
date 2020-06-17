@@ -1,16 +1,29 @@
 <template>
   <div class="container">
     <h3>Products</h3>
+    <a @click="goBack" class="waves-effect waves-light btn-small"
+      ><i class="material-icons left">forward</i>Last product view
+    </a>
 
-    <input type="text" v-model="search" />
+    <form class="form-inline d-flex justify-content-center md-form form-sm">
+      <input
+        v-model="search"
+        class="form-control form-control-sm mr-3 w-75"
+        type="text"
+        placeholder="Search"
+        aria-label="Search"
+      />
+    </form>
 
-    <button @click="sort">Order by Price (DESC)</button>
-    <button @click="reverse">Order By Price (ASC)</button>
-    <button @click="goBack">Last item view</button>
+    <a @click="sort" class="waves-effect waves-light btn-small"
+      ><i class="material-icons left">arrow_drop_down</i>Price : High To Low
+    </a>
+    <a @click="reverse" class="waves-effect waves-light btn-small"
+      ><i class="material-icons left">arrow_drop_up</i>Price : Low To High
+    </a>
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Id</th>
           <th scope="col">Name</th>
           <th scope="col">Supplier</th>
           <th scope="col">Quantity</th>
@@ -18,10 +31,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr  v-for="product in filteredProducts" :key="product.product_name ">
-          <th scope="row">{{ product._id.$oid }}</th>
-          <!-- <td > {{ product.product_name }}</td> -->
-          <router-link tag="td" :to="'/product/' + product._id.$oid"><a>{{ product.product_name }}</a></router-link>
+        <tr v-for="product in filteredProducts" :key="product.product_name">
+          <router-link tag="td" :to="'/product/' + product._id.$oid"
+            ><a>{{ product.product_name }}</a></router-link
+          >
           <td>{{ product.supplier }}</td>
           <td>{{ product.quantity }}</td>
           <td>{{ product.unit_cost }}</td>
@@ -33,20 +46,17 @@
 
 <script>
 import axios from "axios";
-// import data from '../../static/data.json'
-// console.log(data)
 export default {
   name: "Products",
   data() {
     return {
-      componentLoaded: false,
       search: "",
       products: [],
-      lastView: ''
+      lastView: ""
     };
   },
   created: function() {
-    axios.get("/static/data.json").then((res) => {
+    axios.get("/static/data.json").then(res => {
       this.products = res.data;
     });
   },
@@ -72,29 +82,32 @@ export default {
       var bN = parseInt(b.unit_cost.replace(reN, ""), 10);
       return aN === bN ? 0 : aN > bN ? 1 : -1;
     },
-    goBack: function () {
-      this.$router.push('/product/'+this.lastView)
+    goBack: function() {
+      this.$router.push("/product/" + this.lastView);
     }
   },
   mounted() {
-    this.lastView = localStorage.getItem('id')
-    // console.log(this.lastView)
-    },
+    this.lastView = localStorage.getItem("id");
+  },
   computed: {
     filteredProducts() {
-      return this.products.filter((product) => {
+      return this.products.filter(product => {
         return (
           product.product_name
             .toLowerCase()
             .indexOf(this.search.toLowerCase()) > -1
         );
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
 h3 {
-  margin-bottom: 5%;
+  margin-bottom: 2%;
+}
+a {
+  margin-bottom: 2%;
+  margin-top: 2%;
 }
 </style>
